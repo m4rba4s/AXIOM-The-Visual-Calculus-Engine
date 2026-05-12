@@ -9,8 +9,8 @@ export const CircleUnrollingModule = () => {
   const numRings = 20;
 
   return (
-    <div style={{ display: 'flex', height: '100%', width: '100%' }}>
-      <div className="sidebar" style={{ position: 'relative', zIndex: 10 }}>
+    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
+      <div className="module-controls">
         <h2>Circle Deconstruction</h2>
         <p>Visualizing the derivation of circle area by integrating concentric rings.</p>
 
@@ -46,7 +46,7 @@ export const CircleUnrollingModule = () => {
         </div>
       </div>
 
-      <div className="canvas-container" style={{ flex: 1, background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="canvas-container" style={{ position: 'absolute', inset: 0, background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <svg width="100%" height="100%" viewBox="0 0 800 600">
           <g transform="translate(400, 300)">
             {/* Grid/Axes */}
@@ -56,52 +56,39 @@ export const CircleUnrollingModule = () => {
               const r = (radius / numRings) * (i + 1);
               const circumference = 2 * Math.PI * r;
               
-              // Interpolation between circle and line
-              // When unrollFactor = 0: circle
-              // When unrollFactor = 1: horizontal line at y=200, centered?
+              const numPoints = 60;
+              const points = [];
               
-              // We'll place the triangle on the right and circle on the left or just morph?
-              // The user's python script had two plots. Let's do a morphing visualization.
-              
-              const xOffset = -200 * (1 - unrollFactor);
-              const yOffset = 0;
-              
-              if (unrollFactor < 0.1) {
-                // Draw circle
-                return (
-                  <circle
-                    key={i}
-                    cx={xOffset}
-                    cy={yOffset}
-                    r={r}
-                    fill="none"
-                    stroke="#38bdf8"
-                    strokeWidth="2"
-                    opacity={0.3 + (i / numRings) * 0.7}
-                  />
-                );
-              } else {
-                // Draw unrolling arc or line
-                // For simplicity in a prototype, we'll morph from circle to line
-                // A better visual is "peeling" but that's complex path math.
-                // Let's do a "straightening" morph.
+              for (let j = 0; j <= numPoints; j++) {
+                const t = j / numPoints;
                 
-                const width = circumference * unrollFactor;
-                const height = 2; // thickness
+                // Circle point (starts from bottom, goes counter-clockwise to "unroll")
+                const angle = Math.PI / 2 - t * 2 * Math.PI;
+                const circX = -200 + r * Math.cos(angle);
+                const circY = r * Math.sin(angle);
                 
-                return (
-                  <rect
-                    key={i}
-                    x={xOffset - width / 2}
-                    y={200 - r}
-                    width={width}
-                    height={height}
-                    fill="#38bdf8"
-                    opacity={0.3 + (i / numRings) * 0.7}
-                    rx="1"
-                  />
-                );
+                // Line point (starts at x=0, goes right to form the base of the triangle)
+                const lineX = 0 + t * circumference;
+                const lineY = 200 - r;
+                
+                // Linear morphing interpolation
+                const x = circX * (1 - unrollFactor) + lineX * unrollFactor;
+                const y = circY * (1 - unrollFactor) + lineY * unrollFactor;
+                
+                points.push(`${x},${y}`);
               }
+              
+              return (
+                <polyline
+                  key={i}
+                  points={points.join(' ')}
+                  fill="none"
+                  stroke="#38bdf8"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  opacity={0.3 + (i / numRings) * 0.7}
+                />
+              );
             })}
 
             {/* Labels */}

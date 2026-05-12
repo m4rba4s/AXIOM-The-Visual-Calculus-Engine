@@ -34,8 +34,8 @@ export const FTCModule = () => {
   const toSVGY_F = (y: number) => offsetY_F - y * scaleY;
 
   return (
-    <div style={{ display: 'flex', height: '100%', width: '100%' }}>
-      <div className="sidebar">
+    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
+      <div className="module-controls">
         <h2>Fundamental Theorem</h2>
         <p>The bridge between accumulation (integral) and rate of change (derivative).</p>
 
@@ -60,7 +60,7 @@ export const FTCModule = () => {
         </div>
       </div>
 
-      <div className="canvas-container" style={{ flex: 1 }}>
+      <div className="canvas-container" style={{ position: 'absolute', inset: 0 }}>
         <svg width="100%" height="100%" viewBox="0 0 800 600">
           {/* Top Plot: f(t) */}
           <text x={offsetX} y={offsetY_f - 120} fill="#f8fafc" fontSize="14" fontWeight="bold">f(t) - Rate of Change</text>

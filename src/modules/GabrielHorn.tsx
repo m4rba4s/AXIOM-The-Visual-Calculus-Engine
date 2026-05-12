@@ -56,12 +56,22 @@ export const GabrielHornModule = () => {
           <MathDisplay formula="A = 2\pi \int_1^\infty \frac{1}{x} \sqrt{1 + \frac{1}{x^4}} dx \to \infty" block />
 
           <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(251, 191, 36, 0.1)', borderRadius: '4px', border: '1px solid #fbbf24' }}>
-            <span style={{ fontSize: '0.75rem' }}>Calculus Proof: The volume converges while the surface area diverges. You can fill it with paint, but you can never paint its surface.</span>
+            <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: '#fbbf24' }}>Why It Diverges:</div>
+            <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
+              Crucial step: <MathDisplay formula="\sqrt{1 + 1/x^4} \ge 1" /> for all <MathDisplay formula="x \ge 1" />.
+            </p>
+            <div style={{ margin: '0.5rem 0' }}>
+              <MathDisplay formula="A \ge 2\pi \int_1^\infty \frac{1}{x} dx = 2\pi [\ln(x)]_1^\infty = \infty" block />
+            </div>
+            <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
+              The area relies on the harmonic series (diverges), while the volume relies on <MathDisplay formula="1/x^2" /> (converges).
+              Thus, <MathDisplay formula="1/x" /> decays "too slowly" for the surface area to be finite.
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="canvas-container" style={{ flex: 1 }}>
+      <div className="canvas-container" style={{ position: 'absolute', inset: 0 }}>
         <svg width="100%" height="100%" viewBox="0 0 800 600">
           <g transform={`translate(${centerX}, ${centerY})`}>
             {/* X-Axis */}

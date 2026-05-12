@@ -30,8 +30,8 @@ export const RiemannSumModule = () => {
   const toSVGY = (y: number) => offsetY - y * scaleY;
 
   return (
-    <div style={{ display: 'flex', height: '100%', width: '100%' }}>
-      <div className="sidebar">
+    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
+      <div className="module-controls">
         <h2>Riemann Sums</h2>
         <p>Approximating the area under a curve via a sum of rectangles.</p>
 
@@ -50,8 +50,8 @@ export const RiemannSumModule = () => {
           <label>Sum Type</label>
           <select 
             value={sumType} 
-            onChange={(e) => setSumType(e.target.value as any)}
-            style={{ width: '100%', background: '#1e293b', color: 'white', border: '1px solid rgba(255,255,255,0.1)', padding: '0.5rem' }}
+            onChange={(e) => setSumType(e.target.value as 'left' | 'right' | 'mid')}
+            className="control-select"
           >
             <option value="left">Left Rectangles</option>
             <option value="right">Right Rectangles</option>
@@ -61,16 +61,16 @@ export const RiemannSumModule = () => {
 
         <div className="math-pane">
           <MathDisplay formula={`S_n = \\sum_{i=1}^n f(x_i^*) \\Delta x`} block />
-          <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <div className="math-pane-row">
               <span>Riemann Sum:</span>
               <span style={{ color: '#38bdf8', fontWeight: 'bold' }}>{formatNumber(sum)}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className="math-pane-row">
               <span>Exact Value:</span>
               <span style={{ color: '#818cf8' }}>{formatNumber(exactArea)}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className="math-pane-row">
               <span>Error:</span>
               <span style={{ color: '#ef4444' }}>{formatNumber(Math.abs(sum - exactArea))}</span>
             </div>
@@ -78,7 +78,7 @@ export const RiemannSumModule = () => {
         </div>
       </div>
 
-      <div className="canvas-container" style={{ flex: 1 }}>
+      <div className="canvas-container" style={{ position: 'absolute', inset: 0 }}>
         <svg width="100%" height="100%" viewBox="0 0 800 600">
           {/* Axes */}
           <line x1={toSVGX(-1)} y1={offsetY} x2={toSVGX(5)} y2={offsetY} stroke="var(--axis-color)" strokeWidth="2" />

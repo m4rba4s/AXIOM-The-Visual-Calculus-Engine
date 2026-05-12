@@ -26,8 +26,8 @@ export const SphereVolumeModule = () => {
   const currentRSlice = Math.sqrt(Math.max(0, R * R - zHighlight * zHighlight));
 
   return (
-    <div style={{ display: 'flex', height: '100%', width: '100%' }}>
-      <div className="sidebar" style={{ width: '350px' }}>
+    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
+      <div className="module-controls">
         <h2>Sphere Volume (3D)</h2>
         <p>Deriving the volume formula via the disk method (slicing).</p>
 
@@ -77,7 +77,7 @@ export const SphereVolumeModule = () => {
         </div>
       </div>
 
-      <div className="canvas-container" style={{ flex: 1, position: 'relative' }}>
+      <div className="canvas-container" style={{ position: 'absolute', inset: 0 }}>
         <svg width="100%" height="100%" viewBox="0 0 800 600">
           <defs>
             <radialGradient id="sphereGradient" cx="30%" cy="30%" r="70%">
@@ -139,7 +139,7 @@ export const SphereVolumeModule = () => {
         </svg>
 
         {/* Legend Overlay */}
-        <div style={{ position: 'absolute', bottom: '20px', right: '20px', background: 'rgba(15, 23, 42, 0.8)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="legend-overlay">
           <div style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>Volume Synthesis:</div>
           <div style={{ color: '#38bdf8' }}>$V \approx \sum \pi r_i^2 \Delta z$</div>
           <div style={{ color: '#22c55e', fontSize: '1.1rem', marginTop: '0.5rem' }}>$V = \frac{4}{3}\pi R^3$</div>
