@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { MathDisplay } from '../components/MathDisplay';
 import { formatNumber } from '../math/calculus';
+import { Layout } from '../components/Layout';
 
-export const SphereVolumeModule = () => {
+export const SphereVolumeModule = ({ activeModule, setActiveModule }: any) => {
   const [R, setR] = useState(150);
   const [numSlices, setNumSlices] = useState(10);
   const [zHighlight, setZHighlight] = useState(0);
@@ -25,58 +26,60 @@ export const SphereVolumeModule = () => {
 
   const currentRSlice = Math.sqrt(Math.max(0, R * R - zHighlight * zHighlight));
 
-  return (
-    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
-      <div className="module-controls">
-        <h2>Sphere Volume (3D)</h2>
-        <p>Deriving the volume formula via the disk method (slicing).</p>
+  const controls = (
+    <>
+      <h2>Sphere Volume (3D)</h2>
+      <p>Deriving the volume formula via the disk method (slicing).</p>
 
-        <div className="control-group">
-          <label>Radius R: {R}</label>
-          <input 
-            type="range" 
-            min="50" 
-            max="200" 
-            value={R} 
-            onChange={(e) => setR(Number(e.target.value))} 
-          />
-        </div>
-
-        <div className="control-group">
-          <label>Disk Count: {numSlices}</label>
-          <input 
-            type="range" 
-            min="2" 
-            max="50" 
-            value={numSlices} 
-            onChange={(e) => setNumSlices(Number(e.target.value))} 
-          />
-        </div>
-
-        <div className="control-group">
-          <label>Z-Height Analysis: {formatNumber(zHighlight, 1)}</label>
-          <input 
-            type="range" 
-            min={-R} 
-            max={R} 
-            step="1" 
-            value={zHighlight} 
-            onChange={(e) => setZHighlight(Number(e.target.value))} 
-          />
-        </div>
-
-        <div className="math-pane">
-          <div style={{ color: '#38bdf8', fontWeight: 'bold', marginBottom: '0.5rem' }}>1. Pythagorean Theorem:</div>
-          <MathDisplay formula="r^2 + z^2 = R^2 \implies r = \sqrt{R^2 - z^2}" block />
-          
-          <div style={{ color: '#818cf8', fontWeight: 'bold', margin: '1rem 0 0.5rem 0' }}>2. Disk Volume dV:</div>
-          <MathDisplay formula="dV = \pi r^2 dz = \pi (R^2 - z^2) dz" block />
-
-          <div style={{ color: '#22c55e', fontWeight: 'bold', margin: '1rem 0 0.5rem 0' }}>3. Synthesis Integral:</div>
-          <MathDisplay formula="V = \int_{-R}^{R} \pi (R^2 - z^2) dz = \frac{4}{3}\pi R^3" block />
-        </div>
+      <div className="control-group">
+        <label>Radius R: {R}</label>
+        <input 
+          type="range" 
+          min="50" 
+          max="200" 
+          value={R} 
+          onChange={(e) => setR(Number(e.target.value))} 
+        />
       </div>
 
+      <div className="control-group">
+        <label>Disk Count: {numSlices}</label>
+        <input 
+          type="range" 
+          min="2" 
+          max="50" 
+          value={numSlices} 
+          onChange={(e) => setNumSlices(Number(e.target.value))} 
+        />
+      </div>
+
+      <div className="control-group">
+        <label>Z-Height Analysis: {formatNumber(zHighlight, 1)}</label>
+        <input 
+          type="range" 
+          min={-R} 
+          max={R} 
+          step="1" 
+          value={zHighlight} 
+          onChange={(e) => setZHighlight(Number(e.target.value))} 
+        />
+      </div>
+
+      <div className="math-pane">
+        <div style={{ color: '#38bdf8', fontWeight: 'bold', marginBottom: '0.5rem' }}>1. Pythagorean Theorem:</div>
+        <MathDisplay formula="r^2 + z^2 = R^2 \implies r = \sqrt{R^2 - z^2}" block />
+        
+        <div style={{ color: '#818cf8', fontWeight: 'bold', margin: '1rem 0 0.5rem 0' }}>2. Disk Volume dV:</div>
+        <MathDisplay formula="dV = \pi r^2 dz = \pi (R^2 - z^2) dz" block />
+
+        <div style={{ color: '#22c55e', fontWeight: 'bold', margin: '1rem 0 0.5rem 0' }}>3. Synthesis Integral:</div>
+        <MathDisplay formula="V = \int_{-R}^{R} \pi (R^2 - z^2) dz = \frac{4}{3}\pi R^3" block />
+      </div>
+    </>
+  );
+
+  return (
+    <Layout controls={controls} activeModule={activeModule} setActiveModule={setActiveModule}>
       <div className="canvas-container" style={{ position: 'absolute', inset: 0 }}>
         <svg width="100%" height="100%" viewBox="0 0 800 600">
           <defs>
@@ -145,6 +148,6 @@ export const SphereVolumeModule = () => {
           <div style={{ color: '#22c55e', fontSize: '1.1rem', marginTop: '0.5rem' }}>$V = \frac{4}{3}\pi R^3$</div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };

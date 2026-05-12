@@ -133,30 +133,13 @@ input[type="range"] {
 }
 
 /* FIX-1 & FIX-5: Module specific controls and classes */
-.module-controls {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-  width: 360px;
-  background-color: rgba(30, 41, 59, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  display: flex;
-  flex-direction: column;
-  padding: 1.5rem;
-  overflow-y: auto;
-  z-index: 10;
-  max-height: calc(100vh - 3rem);
-}
-
-.module-controls h2 {
+.controls-container h2 {
   margin-top: 0;
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
 }
 
-.module-controls p {
+.controls-container p {
   color: var(--text-secondary);
   font-size: 0.85rem;
   margin-bottom: 1.5rem;

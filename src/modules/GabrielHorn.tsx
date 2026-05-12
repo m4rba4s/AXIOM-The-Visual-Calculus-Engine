@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { MathDisplay } from '../components/MathDisplay';
 import { formatNumber } from '../math/calculus';
+import { Layout } from '../components/Layout';
 
-export const GabrielHornModule = () => {
+export const GabrielHornModule = ({ activeModule, setActiveModule }: any) => {
   const [xMax, setXMax] = useState(5);
   const [slices, setSlices] = useState(20);
 
@@ -29,48 +30,50 @@ export const GabrielHornModule = () => {
     return pts;
   }, [xMax, slices]);
 
-  return (
-    <div style={{ display: 'flex', height: '100%', width: '100%' }}>
-      <div className="sidebar" style={{ width: '380px' }}>
-        <h2>Gabriel's Horn</h2>
-        <p>A mathematical paradox: a solid with infinite surface area but finite volume.</p>
+  const controls = (
+    <>
+      <h2>Gabriel's Horn</h2>
+      <p>A mathematical paradox: a solid with infinite surface area but finite volume.</p>
 
-        <div className="control-group">
-          <label>Length (x-axis): {formatNumber(xMax, 1)}</label>
-          <input type="range" min="1.1" max="10" step="0.1" value={xMax} onChange={(e) => setXMax(Number(e.target.value))} />
-        </div>
-
-        <div className="control-group">
-          <label>Visual Fidelity: {slices}</label>
-          <input type="range" min="5" max="100" value={slices} onChange={(e) => setSlices(Number(e.target.value))} />
-        </div>
-
-        <div className="math-pane">
-          <div style={{ color: '#fbbf24', fontWeight: 'bold' }}>The Paradox:</div>
-          <p style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Created by rotating $y = 1/x$ for $x \ge 1$.</p>
-          
-          <div style={{ color: '#38bdf8', fontSize: '0.85rem', marginTop: '1rem' }}>Volume (Finite):</div>
-          <MathDisplay formula="V = \pi \int_1^\infty \frac{1}{x^2} dx = \pi" block />
-          
-          <div style={{ color: '#ef4444', fontSize: '0.85rem', marginTop: '1rem' }}>Surface Area (Infinite):</div>
-          <MathDisplay formula="A = 2\pi \int_1^\infty \frac{1}{x} \sqrt{1 + \frac{1}{x^4}} dx \to \infty" block />
-
-          <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(251, 191, 36, 0.1)', borderRadius: '4px', border: '1px solid #fbbf24' }}>
-            <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: '#fbbf24' }}>Why It Diverges:</div>
-            <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
-              Crucial step: <MathDisplay formula="\sqrt{1 + 1/x^4} \ge 1" /> for all <MathDisplay formula="x \ge 1" />.
-            </p>
-            <div style={{ margin: '0.5rem 0' }}>
-              <MathDisplay formula="A \ge 2\pi \int_1^\infty \frac{1}{x} dx = 2\pi [\ln(x)]_1^\infty = \infty" block />
-            </div>
-            <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
-              The area relies on the harmonic series (diverges), while the volume relies on <MathDisplay formula="1/x^2" /> (converges).
-              Thus, <MathDisplay formula="1/x" /> decays "too slowly" for the surface area to be finite.
-            </p>
-          </div>
-        </div>
+      <div className="control-group">
+        <label>Length (x-axis): {formatNumber(xMax, 1)}</label>
+        <input type="range" min="1.1" max="10" step="0.1" value={xMax} onChange={(e) => setXMax(Number(e.target.value))} />
       </div>
 
+      <div className="control-group">
+        <label>Visual Fidelity: {slices}</label>
+        <input type="range" min="5" max="100" value={slices} onChange={(e) => setSlices(Number(e.target.value))} />
+      </div>
+
+      <div className="math-pane">
+        <div style={{ color: '#fbbf24', fontWeight: 'bold' }}>The Paradox:</div>
+        <p style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Created by rotating $y = 1/x$ for $x \ge 1$.</p>
+        
+        <div style={{ color: '#38bdf8', fontSize: '0.85rem', marginTop: '1rem' }}>Volume (Finite):</div>
+        <MathDisplay formula="V = \pi \int_1^\infty \frac{1}{x^2} dx = \pi" block />
+        
+        <div style={{ color: '#ef4444', fontSize: '0.85rem', marginTop: '1rem' }}>Surface Area (Infinite):</div>
+        <MathDisplay formula="A = 2\pi \int_1^\infty \frac{1}{x} \sqrt{1 + \frac{1}{x^4}} dx \to \infty" block />
+
+        <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(251, 191, 36, 0.1)', borderRadius: '4px', border: '1px solid #fbbf24' }}>
+          <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: '#fbbf24' }}>Why It Diverges:</div>
+          <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
+            Crucial step: <MathDisplay formula="\sqrt{1 + 1/x^4} \ge 1" /> for all <MathDisplay formula="x \ge 1" />.
+          </p>
+          <div style={{ margin: '0.5rem 0' }}>
+            <MathDisplay formula="A \ge 2\pi \int_1^\infty \frac{1}{x} dx = 2\pi [\ln(x)]_1^\infty = \infty" block />
+          </div>
+          <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
+            The area relies on the harmonic series (diverges), while the volume relies on <MathDisplay formula="1/x^2" /> (converges).
+            Thus, <MathDisplay formula="1/x" /> decays "too slowly" for the surface area to be finite.
+          </p>
+        </div>
+      </div>
+    </>
+  );
+
+  return (
+    <Layout controls={controls} activeModule={activeModule} setActiveModule={setActiveModule}>
       <div className="canvas-container" style={{ position: 'absolute', inset: 0 }}>
         <svg width="100%" height="100%" viewBox="0 0 800 600">
           <g transform={`translate(${centerX}, ${centerY})`}>
@@ -112,9 +115,15 @@ export const GabrielHornModule = () => {
             <text x="0" y="-170" fill="#f8fafc" fontSize="14" fontWeight="bold">Gabriel's Horn (Solid of Revolution)</text>
             <text x="0" y="200" fill="#94a3b8" fontSize="12">Current Volume: {formatNumber(volume, 4)} units³</text>
             <text x="0" y="220" fill="#ef4444" fontSize="12">Surface Area: Growing toward ∞</text>
+            
+            {/* xMax marker */}
+            <line x1={(xMax-1) * scaleX} y1={-200} x2={(xMax-1) * scaleX} y2={200} stroke="rgba(239, 68, 68, 0.5)" strokeDasharray="4" />
+            <text x={(xMax-1) * scaleX + 10} y="-180" fill="#ef4444" fontSize="12">x = {formatNumber(xMax, 1)}</text>
+            <text x={(xMax-1) * scaleX + 10} y="-160" fill="#ef4444" fontSize="12">A(x) &ge; {formatNumber(2 * Math.PI * Math.log(xMax), 2)}</text>
+            <text x={(xMax-1) * scaleX + 10} y="-140" fill="#38bdf8" fontSize="12">V(x) = {formatNumber(Math.PI * (1 - 1/xMax), 2)}</text>
           </g>
         </svg>
       </div>
-    </div>
+    </Layout>
   );
 };

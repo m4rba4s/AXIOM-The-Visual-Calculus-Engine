@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { MathDisplay } from '../components/MathDisplay';
 import { sampleFunction, riemannSum, formatNumber } from '../math/calculus';
+import { Layout } from '../components/Layout';
 
-export const RiemannSumModule = () => {
+export const RiemannSumModule = ({ activeModule, setActiveModule }: any) => {
   const [n, setN] = useState(10);
   const [bounds] = useState({ a: 0, b: 4 });
   const [sumType, setSumType] = useState<'left' | 'right' | 'mid'>('mid');
@@ -29,55 +30,57 @@ export const RiemannSumModule = () => {
   const toSVGX = (x: number) => offsetX + x * scaleX;
   const toSVGY = (y: number) => offsetY - y * scaleY;
 
-  return (
-    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
-      <div className="module-controls">
-        <h2>Riemann Sums</h2>
-        <p>Approximating the area under a curve via a sum of rectangles.</p>
+  const controls = (
+    <>
+      <h2>Riemann Sums</h2>
+      <p>Approximating the area under a curve via a sum of rectangles.</p>
 
-        <div className="control-group">
-          <label>Partition n: {n}</label>
-          <input 
-            type="range" 
-            min="1" 
-            max="100" 
-            value={n} 
-            onChange={(e) => setN(Number(e.target.value))} 
-          />
-        </div>
+      <div className="control-group">
+        <label>Partition n: {n}</label>
+        <input 
+          type="range" 
+          min="1" 
+          max="100" 
+          value={n} 
+          onChange={(e) => setN(Number(e.target.value))} 
+        />
+      </div>
 
-        <div className="control-group">
-          <label>Sum Type</label>
-          <select 
-            value={sumType} 
-            onChange={(e) => setSumType(e.target.value as 'left' | 'right' | 'mid')}
-            className="control-select"
-          >
-            <option value="left">Left Rectangles</option>
-            <option value="right">Right Rectangles</option>
-            <option value="mid">Midpoint Rectangles</option>
-          </select>
-        </div>
+      <div className="control-group">
+        <label>Sum Type</label>
+        <select 
+          value={sumType} 
+          onChange={(e) => setSumType(e.target.value as 'left' | 'right' | 'mid')}
+          className="control-select"
+        >
+          <option value="left">Left Rectangles</option>
+          <option value="right">Right Rectangles</option>
+          <option value="mid">Midpoint Rectangles</option>
+        </select>
+      </div>
 
-        <div className="math-pane">
-          <MathDisplay formula={`S_n = \\sum_{i=1}^n f(x_i^*) \\Delta x`} block />
-          <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-            <div className="math-pane-row">
-              <span>Riemann Sum:</span>
-              <span style={{ color: '#38bdf8', fontWeight: 'bold' }}>{formatNumber(sum)}</span>
-            </div>
-            <div className="math-pane-row">
-              <span>Exact Value:</span>
-              <span style={{ color: '#818cf8' }}>{formatNumber(exactArea)}</span>
-            </div>
-            <div className="math-pane-row">
-              <span>Error:</span>
-              <span style={{ color: '#ef4444' }}>{formatNumber(Math.abs(sum - exactArea))}</span>
-            </div>
+      <div className="math-pane">
+        <MathDisplay formula={`S_n = \\sum_{i=1}^n f(x_i^*) \\Delta x`} block />
+        <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+          <div className="math-pane-row">
+            <span>Riemann Sum:</span>
+            <span style={{ color: '#38bdf8', fontWeight: 'bold' }}>{formatNumber(sum)}</span>
+          </div>
+          <div className="math-pane-row">
+            <span>Exact Value:</span>
+            <span style={{ color: '#818cf8' }}>{formatNumber(exactArea)}</span>
+          </div>
+          <div className="math-pane-row">
+            <span>Error:</span>
+            <span style={{ color: '#ef4444' }}>{formatNumber(Math.abs(sum - exactArea))}</span>
           </div>
         </div>
       </div>
+    </>
+  );
 
+  return (
+    <Layout controls={controls} activeModule={activeModule} setActiveModule={setActiveModule}>
       <div className="canvas-container" style={{ position: 'absolute', inset: 0 }}>
         <svg width="100%" height="100%" viewBox="0 0 800 600">
           {/* Axes */}
@@ -111,6 +114,6 @@ export const RiemannSumModule = () => {
           <text x={toSVGX(bounds.b)} y={offsetY + 20} fill="#94a3b8" fontSize="12" textAnchor="middle">b={bounds.b}</text>
         </svg>
       </div>
-    </div>
+    </Layout>
   );
 };

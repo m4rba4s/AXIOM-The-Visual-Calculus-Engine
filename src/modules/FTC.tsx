@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { MathDisplay } from '../components/MathDisplay';
 import { sampleFunction, formatNumber } from '../math/calculus';
+import { Layout } from '../components/Layout';
 
-export const FTCModule = () => {
+export const FTCModule = ({ activeModule, setActiveModule }: any) => {
   const [xVal, setXVal] = useState(2);
   const a = 0;
 
@@ -33,33 +34,35 @@ export const FTCModule = () => {
   const toSVGY_f = (y: number) => offsetY_f - y * scaleY;
   const toSVGY_F = (y: number) => offsetY_F - y * scaleY;
 
-  return (
-    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
-      <div className="module-controls">
-        <h2>Fundamental Theorem</h2>
-        <p>The bridge between accumulation (integral) and rate of change (derivative).</p>
+  const controls = (
+    <>
+      <h2>Fundamental Theorem</h2>
+      <p>The bridge between accumulation (integral) and rate of change (derivative).</p>
 
-        <div className="control-group">
-          <label>Upper Limit x: {formatNumber(xVal, 2)}</label>
-          <input 
-            type="range" 
-            min="0" 
-            max="6" 
-            step="0.05" 
-            value={xVal} 
-            onChange={(e) => setXVal(Number(e.target.value))} 
-          />
-        </div>
-
-        <div className="math-pane">
-          <MathDisplay formula="F(x) = \int_a^x f(t) \, dt" block />
-          <MathDisplay formula="\frac{d}{dx} F(x) = f(x)" block />
-          <div style={{ marginTop: '1rem', fontSize: '0.8rem' }}>
-            The value of <span style={{ color: '#818cf8' }}>F(x)</span> on the bottom plot is exactly equal to the shaded area under <span style={{ color: '#38bdf8' }}>f(t)</span> on the top plot.
-          </div>
-        </div>
+      <div className="control-group">
+        <label>Upper Limit x: {formatNumber(xVal, 2)}</label>
+        <input 
+          type="range" 
+          min="0" 
+          max="6" 
+          step="0.05" 
+          value={xVal} 
+          onChange={(e) => setXVal(Number(e.target.value))} 
+        />
       </div>
 
+      <div className="math-pane">
+        <MathDisplay formula="F(x) = \int_a^x f(t) \, dt" block />
+        <MathDisplay formula="\frac{d}{dx} F(x) = f(x)" block />
+        <div style={{ marginTop: '1rem', fontSize: '0.8rem' }}>
+          The value of <span style={{ color: '#818cf8' }}>F(x)</span> on the bottom plot is exactly equal to the shaded area under <span style={{ color: '#38bdf8' }}>f(t)</span> on the top plot.
+        </div>
+      </div>
+    </>
+  );
+
+  return (
+    <Layout controls={controls} activeModule={activeModule} setActiveModule={setActiveModule}>
       <div className="canvas-container" style={{ position: 'absolute', inset: 0 }}>
         <svg width="100%" height="100%" viewBox="0 0 800 600">
           {/* Top Plot: f(t) */}
@@ -99,6 +102,6 @@ export const FTCModule = () => {
           </text>
         </svg>
       </div>
-    </div>
+    </Layout>
   );
 };

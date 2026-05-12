@@ -1,51 +1,54 @@
 import { useState } from 'react';
 import { MathDisplay } from '../components/MathDisplay';
+import { Layout } from '../components/Layout';
 
-export const CircleUnrollingModule = () => {
+export const CircleUnrollingModule = ({ activeModule, setActiveModule }: any) => {
   const [radius, setRadius] = useState(150);
   const [unrollFactor, setUnrollFactor] = useState(0); // 0 = circle, 1 = triangle
 
   const maxRadius = 200;
   const numRings = 20;
 
-  return (
-    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
-      <div className="module-controls">
-        <h2>Circle Deconstruction</h2>
-        <p>Visualizing the derivation of circle area by integrating concentric rings.</p>
+  const controls = (
+    <>
+      <h2>Circle Deconstruction</h2>
+      <p>Visualizing the derivation of circle area by integrating concentric rings.</p>
 
-        <div className="control-group">
-          <label>Radius R: {radius}</label>
-          <input 
-            type="range" 
-            min="50" 
-            max={maxRadius} 
-            value={radius} 
-            onChange={(e) => setRadius(Number(e.target.value))} 
-          />
-        </div>
-
-        <div className="control-group">
-          <label>Unroll Factor: {Math.round(unrollFactor * 100)}%</label>
-          <input 
-            type="range" 
-            min="0" 
-            max="1" 
-            step="0.01" 
-            value={unrollFactor} 
-            onChange={(e) => setUnrollFactor(Number(e.target.value))} 
-          />
-        </div>
-
-        <div className="math-pane">
-          <MathDisplay formula="A = \int_0^R 2\pi r \, dr" block />
-          <MathDisplay formula="A = \left[ \pi r^2 \right]_0^R = \pi R^2" block />
-          <p style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-            Each ring of radius $r$ and thickness $dr$ unrolls into a strip of length $2\pi r$. The sum of all strips forms a right triangle with base $2\pi R$ and height $R$.
-          </p>
-        </div>
+      <div className="control-group">
+        <label>Radius R: {radius}</label>
+        <input 
+          type="range" 
+          min="50" 
+          max={maxRadius} 
+          value={radius} 
+          onChange={(e) => setRadius(Number(e.target.value))} 
+        />
       </div>
 
+      <div className="control-group">
+        <label>Unroll Factor: {Math.round(unrollFactor * 100)}%</label>
+        <input 
+          type="range" 
+          min="0" 
+          max="1" 
+          step="0.01" 
+          value={unrollFactor} 
+          onChange={(e) => setUnrollFactor(Number(e.target.value))} 
+        />
+      </div>
+
+      <div className="math-pane">
+        <MathDisplay formula="A = \int_0^R 2\pi r \, dr" block />
+        <MathDisplay formula="A = \left[ \pi r^2 \right]_0^R = \pi R^2" block />
+        <p style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+          Each ring of radius $r$ and thickness $dr$ unrolls into a strip of length $2\pi r$. The sum of all strips forms a right triangle with base $2\pi R$ and height $R$.
+        </p>
+      </div>
+    </>
+  );
+
+  return (
+    <Layout controls={controls} activeModule={activeModule} setActiveModule={setActiveModule}>
       <div className="canvas-container" style={{ position: 'absolute', inset: 0, background: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <svg width="100%" height="100%" viewBox="0 0 800 600">
           <g transform="translate(400, 300)">
@@ -101,6 +104,6 @@ export const CircleUnrollingModule = () => {
           </g>
         </svg>
       </div>
-    </div>
+    </Layout>
   );
 };
